@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 
 from django.contrib.auth import login
 
-from myproject.accounts.utils import send_telegram_message
+from .utils import send_telegram_message
 from .models import User, Organization
 from .forms import RegisterForm
 
@@ -45,3 +45,11 @@ def check_out(request):
         attendance.check_out = timezone.now()
         attendance.save()
     return redirect('profile')
+
+@login_required
+def profile_view(request):
+    attendances = Attendance.objects.filter(user=request.user).order_by('-check_in')
+    return render(request, 'accounts/profile.html', {
+        'user': request.user,
+        'attendances': attendances,
+    })

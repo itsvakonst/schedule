@@ -2,11 +2,22 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+
 class User(AbstractUser):
     telegram_id = models.CharField(max_length=50, blank=True, null=True)
     full_name = models.CharField(max_length=150, blank=True)
     position = models.CharField(max_length=100, blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True, blank=True)
 
     notify_by_email = models.BooleanField(default=True)
     notify_by_telegram = models.BooleanField(default=False)
@@ -29,9 +40,3 @@ class Attendance(models.Model):
         return f"{self.user.username} — {self.date}"
 
 
-class Organization(models.Model):
-    name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name

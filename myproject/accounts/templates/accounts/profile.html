@@ -1,0 +1,13 @@
+<h1>Личный кабинет {{ user.username }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Организация: {{ user.organization }}</p>
+<p>Админ: {{ user.is_admin }}</p>
+
+<h2>Последние отметки</h2>
+<ul>
+  {% for a in attendances %}
+    <li>Приход: {{ a.check_in }} | Уход: {{ a.check_out }}</li>
+  {% empty %}
+    <li>Нет данных</li>
+  {% endfor %}
+</ul>
